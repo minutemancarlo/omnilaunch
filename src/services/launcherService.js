@@ -11,6 +11,7 @@ export const launchApp = async (item) => {
       args: item.args || '',
       cwd: item.cwd || '',
       runInTerminal: item.runInTerminal || false,
+      runAsAdmin: item.runAsAdmin || false,
     });
   } else {
     console.warn('Electron API not detected. Mocking app launch for:', item.name);

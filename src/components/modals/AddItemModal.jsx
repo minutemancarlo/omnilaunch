@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, AppWindow, Globe, FolderOpen, Sparkles, Tag, Hash, Loader2, Check, RefreshCw } from 'lucide-react';
+import { X, AppWindow, Globe, FolderOpen, Sparkles, Tag, Hash, Loader2, Check, RefreshCw, Shield } from 'lucide-react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import {
   pickExecutableFile,
@@ -58,6 +58,7 @@ export const AddItemModal = ({
   const [args, setArgs] = useState('');
   const [cwd, setCwd] = useState('');
   const [runInTerminal, setRunInTerminal] = useState(false);
+  const [runAsAdmin, setRunAsAdmin] = useState(false);
 
   // URL fields
   const [url, setUrl] = useState('');
@@ -85,6 +86,7 @@ export const AddItemModal = ({
       setArgs(editingItem.args || '');
       setCwd(editingItem.cwd || '');
       setRunInTerminal(editingItem.runInTerminal || false);
+      setRunAsAdmin(editingItem.runAsAdmin || false);
       setUrl(editingItem.url || '');
       setDelaySeconds(editingItem.delaySeconds || 0);
     } else {
@@ -99,6 +101,7 @@ export const AddItemModal = ({
       setArgs('');
       setCwd('');
       setRunInTerminal(false);
+      setRunAsAdmin(false);
       setUrl('');
       setDelaySeconds(0);
     }
@@ -261,7 +264,7 @@ export const AddItemModal = ({
       iconDataUrl: iconDataUrl || '',
       delaySeconds: Number(delaySeconds) || 0,
       ...(type === 'app'
-        ? { executablePath, args, cwd, runInTerminal }
+        ? { executablePath, args, cwd, runInTerminal, runAsAdmin }
         : { url }),
     };
 
@@ -612,7 +615,7 @@ export const AddItemModal = ({
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 6 }}>
                   <input
                     type="checkbox"
                     id="terminalToggle"
@@ -622,6 +625,30 @@ export const AddItemModal = ({
                   />
                   <label htmlFor="terminalToggle" style={{ fontSize: 13, color: 'var(--text-secondary)', cursor: 'pointer' }}>
                     Run inside separate Command Prompt window (useful for CLI/scripts)
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
+                  <input
+                    type="checkbox"
+                    id="adminToggle"
+                    checked={runAsAdmin}
+                    onChange={(e) => setRunAsAdmin(e.target.checked)}
+                    style={{ cursor: 'pointer', width: 16, height: 16, accentColor: '#f59e0b' }}
+                  />
+                  <label
+                    htmlFor="adminToggle"
+                    style={{
+                      fontSize: 13,
+                      color: 'var(--text-secondary)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 6,
+                    }}
+                  >
+                    <Shield size={14} color="#f59e0b" />
+                    <span>Run as Administrator (Request Windows UAC elevation)</span>
                   </label>
                 </div>
               </>

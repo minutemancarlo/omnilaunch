@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Edit2, Trash2, Loader2, Check } from 'lucide-react';
+import { Play, Edit2, Trash2, Loader2, Check, Shield } from 'lucide-react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { AppIconRenderer } from '../common/BrandIcons';
 
@@ -37,6 +37,26 @@ export const ItemCard = ({ item, onEdit }) => {
             <h3 className="item-name" title={item.name}>{item.name}</h3>
             <span className="item-type-badge">
               {getSubtypeLabel()}
+              {item.runAsAdmin && (
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 3,
+                    color: '#f59e0b',
+                    fontWeight: 700,
+                    marginLeft: 6,
+                    padding: '1px 5px',
+                    borderRadius: 4,
+                    background: 'rgba(245, 158, 11, 0.12)',
+                    border: '1px solid rgba(245, 158, 11, 0.25)',
+                    fontSize: 10,
+                  }}
+                  title="Runs with Administrator / UAC privileges"
+                >
+                  <Shield size={10} /> ADMIN
+                </span>
+              )}
               {item.delaySeconds > 0 && (
                 <span style={{ color: 'var(--accent-amber)', marginLeft: 4 }}>
                   (+{item.delaySeconds}s delay)

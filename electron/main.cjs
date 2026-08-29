@@ -365,7 +365,7 @@ ipcMain.handle('launch:open-external', async (_event, url) => {
 // 2. Launch Desktop App / Executable / Script
 ipcMain.handle('launch:app', async (_event, appConfig) => {
   try {
-    const { executablePath, args = '', cwd = '', runInTerminal = false } = appConfig;
+    const { executablePath, args = '', cwd = '', runInTerminal = false, runAsAdmin = false } = appConfig;
 
     if (!executablePath) {
       throw new Error('Executable path is required');
@@ -382,6 +382,37 @@ ipcMain.handle('launch:app', async (_event, appConfig) => {
     // Windows 11 compatibility: fix 'msteams.exe' -> 'ms-teams.exe'
     if (trimmedPath.toLowerCase() === 'msteams.exe' || trimmedPath.toLowerCase() === 'teams.exe') {
       trimmedPath = 'ms-teams.exe';
+    }
+
+    // If runAsAdmin is requested, elevate with Windows UAC (Verb RunAs)
+    if (runAsAdmin && process.platform === 'win32') {
+      const workingDir = cwd && fs.existsSync(cwd) ? cwd.trim() : '';
+      let targetFile = trimmedPath;
+      let targetArgs = args ? args.trim() : '';
+
+      if (runInTerminal) {
+        targetFile = 'cmd.exe';
+        targetArgs = `/k ""${trimmedPath}" ${targetArgs}"`.trim();
+      }
+
+      const escapedPath = targetFile.replace(/'/g, "''");
+      let psCommand = `Start-Process -FilePath '${escapedPath}'`;
+      if (targetArgs) {
+        const escapedArgs = targetArgs.replace(/'/g, "''");
+        psCommand += ` -ArgumentList '${escapedArgs}'`;
+      }
+      if (workingDir) {
+        const escapedCwd = workingDir.replace(/'/g, "''");
+        psCommand += ` -WorkingDirectory '${escapedCwd}'`;
+      }
+      psCommand += ` -Verb RunAs`;
+
+      exec(`powershell.exe -NoProfile -NonInteractive -Command "${psCommand}"`, (adminErr) => {
+        if (adminErr) {
+          console.warn('RunAs Admin execution failed:', adminErr.message);
+        }
+      });
+      return { success: true };
     }
 
     // If runInTerminal is requested (e.g. for CLI commands or scripts)

@@ -18,6 +18,7 @@ import {
   Zap,
   Hash,
   X,
+  Shield,
 } from 'lucide-react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { AppIconRenderer } from '../common/BrandIcons';
@@ -413,6 +414,25 @@ export const ShortcutsView = ({ onOpenAddShortcutModal, onEditShortcut }) => {
                 <span className="item-type-badge">
                   • {isApp ? (sc.runInTerminal ? 'Terminal' : 'App') : 'URL'}
                 </span>
+                {sc.runAsAdmin && (
+                  <span
+                    style={{
+                      fontSize: '10px',
+                      fontWeight: 700,
+                      color: '#f59e0b',
+                      backgroundColor: 'rgba(245, 158, 11, 0.12)',
+                      border: '1px solid rgba(245, 158, 11, 0.25)',
+                      padding: '1px 5px',
+                      borderRadius: '4px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 3,
+                    }}
+                    title="Runs with Administrator / UAC privileges"
+                  >
+                    <Shield size={10} /> ADMIN
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -600,6 +620,26 @@ export const ShortcutsView = ({ onOpenAddShortcutModal, onEditShortcut }) => {
               >
                 {sc.category || 'General'}
               </span>
+
+              {sc.runAsAdmin && (
+                <span
+                  style={{
+                    fontSize: '9.5px',
+                    fontWeight: 700,
+                    color: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.12)',
+                    border: '1px solid rgba(245, 158, 11, 0.25)',
+                    padding: '1px 5px',
+                    borderRadius: 4,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 3,
+                  }}
+                  title="Runs with Administrator / UAC privileges"
+                >
+                  <Shield size={9} /> ADMIN
+                </span>
+              )}
 
               {tags.map((t) => (
                 <span
