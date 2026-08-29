@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [1.2.1] - 2026-08-30
+
+### 🔧 Fixes & Performance Improvements
+- **Resolved Windows Installer File Locking**:
+  - Re-architected download writing streams to explicitly await operating-system buffer flushing and handle closure promises before invoking setup files.
+  - Eliminated sharing violation errors ("This installation package could not be opened") previously caused by unreleased Node.js file descriptors.
+- **Seamless In-Place NSIS Setup Engine**:
+  - Updated the auto-updater to prefer NSIS `.exe` installers for seamless user-space in-place updates, bypassing Windows Installer service (`msiexec`) temporary directory ACL restrictions.
+- **Direct Process Invocation**:
+  - Removed `cmd.exe /c` shell wrapper when launching setup packages, preventing quotation-mark mangling on paths containing spaces and hyphens.
+
+---
+
 ## [1.2.0] - 2026-08-30
 
 ### 🛡️ New Features

@@ -1,7 +1,29 @@
-export const APP_VERSION = '1.2.0';
+export const APP_VERSION = '1.2.1';
 export const RELEASE_DATE = 'August 30, 2026';
 
 export const CHANGELOG_HISTORY = [
+  {
+    version: '1.2.1',
+    date: 'August 30, 2026',
+    tagline: 'Installer File Lock Resolution & In-Place Update Engine',
+    changes: [
+      {
+        type: 'fix',
+        title: 'Resolved Windows Installer File Locking',
+        desc: 'Wrapped file writing streams in full OS flush and close promises, preventing sharing violations when spawning update installers.',
+      },
+      {
+        type: 'improvement',
+        title: 'Seamless In-Place NSIS Setup Execution',
+        desc: 'Preferred NSIS setup executables for user-space in-place updates, avoiding Windows Installer service NTFS permission issues.',
+      },
+      {
+        type: 'improvement',
+        title: 'Direct Process Argument Passing',
+        desc: 'Spawn installers with clean argument arrays instead of cmd /c to prevent quotation-mark stripping on paths with spaces.',
+      },
+    ],
+  },
   {
     version: '1.2.0',
     date: 'August 30, 2026',
