@@ -5,6 +5,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [1.2.0] - 2026-08-30
+
+### 🛡️ New Features
+- **Run as Administrator (Windows UAC Elevation)**:
+  - Added option to launch desktop applications and scripts with elevated Administrator privileges.
+  - Defaults to **unchecked** for security and standard execution.
+  - Uses native Windows PowerShell `Start-Process -FilePath ... -Verb RunAs`, triggering the standard Windows UAC elevation prompt.
+  - Supports elevating CLI commands inside separate Command Prompt windows.
+- **Visual Admin Status Badges**:
+  - Displays a high-contrast amber `🛡️ ADMIN` badge on Workspace Target cards and Quick Shortcut items (both in Grid and List views).
+- **Private GitHub Repository Update Support**:
+  - Added secure Personal Access Token support in Settings for private GitHub repositories.
+  - Automatic fallback to GitHub Releases API (`api.github.com/repos/.../releases/latest`) when raw URLs are protected.
+- **Automated Cloud CI/CD (GitHub Actions)**:
+  - Added `.github/workflows/release.yml` to automatically compile and publish Windows `.msi` and `.exe` installers to GitHub Releases upon tag creation.
+
+---
+
 ## [1.1.0] - 2026-08-30
 
 ### ✨ New Features

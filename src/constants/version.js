@@ -1,7 +1,34 @@
-export const APP_VERSION = '1.1.0';
+export const APP_VERSION = '1.2.0';
 export const RELEASE_DATE = 'August 30, 2026';
 
 export const CHANGELOG_HISTORY = [
+  {
+    version: '1.2.0',
+    date: 'August 30, 2026',
+    tagline: 'Run as Administrator, Private Repo Updates & Automated CI/CD',
+    changes: [
+      {
+        type: 'feature',
+        title: 'Run as Administrator (Windows UAC Elevation)',
+        desc: 'Added option to launch desktop applications and CLI terminal windows with elevated Administrator privileges using native Windows UAC RunAs.',
+      },
+      {
+        type: 'feature',
+        title: 'Visual Admin Status Badges',
+        desc: 'Prominent amber ADMIN shield indicators on Workspace Target cards and Quick Shortcut items.',
+      },
+      {
+        type: 'feature',
+        title: 'Private GitHub Repository Update Support',
+        desc: 'Secure Personal Access Token authentication for auto-updating from private GitHub repositories, with automatic GitHub Releases API fallback.',
+      },
+      {
+        type: 'feature',
+        title: 'Automated GitHub Actions Cloud Releases',
+        desc: 'Integrated CI/CD cloud pipeline building MSI and NSIS installers automatically upon pushing release tags.',
+      },
+    ],
+  },
   {
     version: '1.1.0',
     date: 'August 30, 2026',
