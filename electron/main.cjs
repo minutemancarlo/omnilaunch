@@ -1014,8 +1014,10 @@ ipcMain.handle('update:check', async (_event, customFeedUrl) => {
       latestVersion = data.tag_name.replace(/^v/, '');
       releaseDate = data.published_at ? new Date(data.published_at).toLocaleDateString() : '';
       releaseNotes = data.body || '';
-      const msiAsset = data.assets && data.assets.find((a) => a.name.toLowerCase().endsWith('.msi') || a.name.toLowerCase().endsWith('.exe'));
-      downloadUrl = msiAsset ? (appSettings.githubToken ? msiAsset.url : msiAsset.browser_download_url) : '';
+      const exeAsset = data.assets && data.assets.find((a) => a.name.toLowerCase().endsWith('.exe') && !a.name.toLowerCase().endsWith('.blockmap'));
+      const msiAsset = data.assets && data.assets.find((a) => a.name.toLowerCase().endsWith('.msi'));
+      const targetAsset = exeAsset || msiAsset;
+      downloadUrl = targetAsset ? (appSettings.githubToken ? targetAsset.url : targetAsset.browser_download_url) : '';
     } else {
       // Standard version.json manifest format
       latestVersion = (data.version || '').replace(/^v/, '');
@@ -1052,7 +1054,11 @@ ipcMain.handle('update:download-installer', async (event, downloadUrl) => {
 
   try {
     const ext = downloadUrl.toLowerCase().endsWith('.exe') ? '.exe' : '.msi';
-    const tempPath = path.join(app.getPath('temp'), `OmniLaunch-Setup-${Date.now()}${ext}`);
+    const updatesDir = path.join(app.getPath('userData'), 'pending-updates');
+    if (!fs.existsSync(updatesDir)) {
+      fs.mkdirSync(updatesDir, { recursive: true });
+    }
+    const tempPath = path.join(updatesDir, `OmniLaunch-Setup-${Date.now()}${ext}`);
     const fileStream = fs.createWriteStream(tempPath);
 
     const headers = {
@@ -1093,7 +1099,14 @@ ipcMain.handle('update:download-installer', async (event, downloadUrl) => {
       }
     }
 
-    fileStream.end();
+    // Wait for the stream to completely finish flushing and close file handle
+    await new Promise((resolve, reject) => {
+      fileStream.on('finish', () => {
+        fileStream.close(resolve);
+      });
+      fileStream.on('error', reject);
+      fileStream.end();
+    });
 
     return {
       success: true,
@@ -1111,22 +1124,36 @@ ipcMain.handle('update:run-installer', async (_event, installerPath) => {
   }
 
   try {
+    // Release OS file handle locks before launching
+    await new Promise((r) => setTimeout(r, 600));
+
     const isMsi = installerPath.toLowerCase().endsWith('.msi');
-    const cmd = isMsi
-      ? `msiexec.exe /i "${installerPath}"`
-      : `start "" "${installerPath}"`;
 
-    const child = spawn('cmd.exe', ['/c', cmd], {
-      detached: true,
-      stdio: 'ignore',
-    });
-    child.unref();
+    if (process.platform === 'win32') {
+      if (isMsi) {
+        // Direct spawn without cmd.exe /c quote-mangling
+        const child = spawn('msiexec.exe', ['/i', installerPath], {
+          detached: true,
+          stdio: 'ignore',
+        });
+        child.unref();
+      } else {
+        // Direct spawn for NSIS executable installer
+        const child = spawn(installerPath, [], {
+          detached: true,
+          stdio: 'ignore',
+        });
+        child.unref();
+      }
+    } else {
+      await shell.openPath(installerPath);
+    }
 
-    // Give installer process 1.5 seconds to initialize before quitting current instance
+    // Give installer process time to spawn, then gracefully exit
     setTimeout(() => {
       isQuitting = true;
       app.quit();
-    }, 1500);
+    }, 1200);
 
     return { success: true };
   } catch (err) {
