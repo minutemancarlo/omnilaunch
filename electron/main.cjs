@@ -937,20 +937,38 @@ ipcMain.handle('update:check', async (_event, customFeedUrl) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
 
-    const res = await fetch(feedUrl, {
+    const headers = {
+      'User-Agent': `OmniLaunch/${currentVersion} (Windows)`,
+      'Accept': 'application/json, text/plain',
+    };
+    if (appSettings.githubToken) {
+      headers['Authorization'] = `token ${appSettings.githubToken.trim()}`;
+    }
+
+    let res = await fetch(feedUrl, {
       signal: controller.signal,
-      headers: {
-        'User-Agent': `OmniLaunch/${currentVersion} (Windows)`,
-        'Accept': 'application/json, text/plain',
-      },
+      headers,
     });
     clearTimeout(timeout);
+
+    // Fallback: If 404, try the GitHub Releases API directly
+    if (!res.ok && res.status === 404 && !customFeedUrl) {
+      try {
+        const ghApiUrl = 'https://api.github.com/repos/minutemancarlo/omnilaunch/releases/latest';
+        const ghRes = await fetch(ghApiUrl, { headers });
+        if (ghRes.ok) {
+          res = ghRes;
+        }
+      } catch (ghErr) {}
+    }
 
     if (!res.ok) {
       return {
         hasUpdate: false,
         currentVersion,
-        error: `Server responded with HTTP ${res.status}`,
+        error: res.status === 404
+          ? 'HTTP 404 — Your GitHub repository is currently set to Private. Make it Public in GitHub Settings (or provide a GitHub Token in OmniLaunch Settings).'
+          : `Server responded with HTTP ${res.status}`,
       };
     }
 
@@ -966,7 +984,7 @@ ipcMain.handle('update:check', async (_event, customFeedUrl) => {
       releaseDate = data.published_at ? new Date(data.published_at).toLocaleDateString() : '';
       releaseNotes = data.body || '';
       const msiAsset = data.assets && data.assets.find((a) => a.name.toLowerCase().endsWith('.msi') || a.name.toLowerCase().endsWith('.exe'));
-      downloadUrl = msiAsset ? msiAsset.browser_download_url : '';
+      downloadUrl = msiAsset ? (appSettings.githubToken ? msiAsset.url : msiAsset.browser_download_url) : '';
     } else {
       // Standard version.json manifest format
       latestVersion = (data.version || '').replace(/^v/, '');
@@ -1006,11 +1024,17 @@ ipcMain.handle('update:download-installer', async (event, downloadUrl) => {
     const tempPath = path.join(app.getPath('temp'), `OmniLaunch-Setup-${Date.now()}${ext}`);
     const fileStream = fs.createWriteStream(tempPath);
 
-    const response = await fetch(downloadUrl, {
-      headers: {
-        'User-Agent': `OmniLaunch/${app.getVersion()} (Windows)`,
-      },
-    });
+    const headers = {
+      'User-Agent': `OmniLaunch/${app.getVersion()} (Windows)`,
+    };
+    if (appSettings.githubToken) {
+      headers['Authorization'] = `token ${appSettings.githubToken.trim()}`;
+    }
+    if (downloadUrl.includes('api.github.com')) {
+      headers['Accept'] = 'application/octet-stream';
+    }
+
+    const response = await fetch(downloadUrl, { headers });
 
     if (!response.ok) {
       return { success: false, error: `Download failed with HTTP ${response.status}` };
