@@ -1,0 +1,45 @@
+{
+  "appId": "com.omnilaunch.app",
+  "productName": "OmniLaunch",
+  "copyright": "Copyright © 2026 OmniLaunch",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "electron/**/*",
+    "public/**/*",
+    "package.json"
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "msi",
+        "arch": [
+          "x64"
+        ]
+      },
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    ],
+    "icon": "public/icon.ico"
+  },
+  "msi": {
+    "oneClick": false,
+    "perMachine": false,
+    "runAfterFinish": true,
+    "shortcutName": "OmniLaunch"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "OmniLaunch"
+  }
+}

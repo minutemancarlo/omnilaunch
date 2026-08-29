@@ -1,0 +1,62 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Primary Vibrant Cyber Gradient -->
+    <linearGradient id="omniPrimaryGrad" x1="64" y1="64" x2="448" y2="448" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="45%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+
+    <!-- Accent Glow Gradient -->
+    <linearGradient id="omniAccentGrad" x1="256" y1="384" x2="256" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="60%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#a7f3d0"/>
+    </linearGradient>
+
+    <!-- Speed Arc Gradient -->
+    <linearGradient id="omniSpeedArc" x1="128" y1="256" x2="384" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+
+    <!-- Filter for soft modern ambient glow -->
+    <filter id="omniGlow" x="30" y="30" width="452" height="452" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Group with Soft Ambient Glow -->
+  <g filter="url(#omniGlow)">
+    <!-- Outer Dual Orbital Thrust Rings -->
+    <!-- Left Orbital Wing -->
+    <path d="M128 356C96 296 104 208 152 148C200 88 276 68 344 96C320 116 264 128 220 164C176 200 156 264 152 320L128 356Z" 
+          fill="url(#omniSpeedArc)" fill-opacity="0.75"/>
+    
+    <!-- Right Orbital Wing -->
+    <path d="M384 356C416 296 408 208 360 148C312 88 236 68 168 96C192 116 248 128 292 164C336 200 356 264 360 320L384 356Z" 
+          fill="url(#omniPrimaryGrad)" fill-opacity="0.9"/>
+
+    <!-- Central Dynamic Launch Shard / Supersonic Chevron -->
+    <!-- Left Wing of Jet -->
+    <path d="M256 72L124 360L236 312L256 268V72Z" 
+          fill="url(#omniPrimaryGrad)"/>
+    
+    <!-- Right Wing of Jet (High-Contrast Facet) -->
+    <path d="M256 72L388 360L276 312L256 268V72Z" 
+          fill="url(#omniAccentGrad)"/>
+
+    <!-- Bottom Booster Exhaust / Energy Wake -->
+    <path d="M224 336L256 440L288 336L256 352L224 336Z" 
+          fill="url(#omniPrimaryGrad)"/>
+
+    <!-- Central Quantum Core (Luminous Sparkle) -->
+    <path d="M256 160L268 204L312 216L268 228L256 272L244 228L200 216L244 204L256 160Z" 
+          fill="#ffffff"/>
+    
+    <!-- Core Bright Dot -->
+    <circle cx="256" cy="216" r="6" fill="#10b981"/>
+  </g>
+</svg>
