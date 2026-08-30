@@ -491,40 +491,6 @@ export const SettingsModal = ({ isOpen, onClose }) => {
                 style={{ width: 17, height: 17, cursor: 'pointer', accentColor: 'var(--accent-primary)' }}
               />
             </label>
-
-            {/* GitHub Token Field for Private Repositories */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 6,
-                padding: '10px 12px',
-                backgroundColor: 'var(--bg-app)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 8,
-                marginTop: 4,
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--text-primary)' }}>
-                  GitHub Access Token
-                </span>
-                <span style={{ fontSize: 10.5, color: 'var(--text-muted)' }}>
-                  Required only if repo is Private
-                </span>
-              </div>
-              <input
-                type="password"
-                className="form-input"
-                placeholder="github_pat_... (Leave empty if repo is Public)"
-                value={settings.githubToken || ''}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setSettings((prev) => ({ ...prev, githubToken: val }));
-                  saveAppSettings({ githubToken: val });
-                }}
-              />
-            </div>
           </div>
 
           <div style={{ height: 1, backgroundColor: 'var(--border-subtle)' }} />

@@ -1124,40 +1124,47 @@ ipcMain.handle('update:run-installer', async (_event, installerPath) => {
   }
 
   try {
-    // Release OS file handle locks before launching
+    const cleanPath = path.resolve(installerPath);
+
+    // Release any lingering OS file locks
     await new Promise((r) => setTimeout(r, 600));
 
-    const isMsi = installerPath.toLowerCase().endsWith('.msi');
+    // Launch via native Windows ShellExecute (handles both .exe and .msi cleanly)
+    const openErr = await shell.openPath(cleanPath);
 
-    if (process.platform === 'win32') {
-      if (isMsi) {
-        // Direct spawn without cmd.exe /c quote-mangling
-        const child = spawn('msiexec.exe', ['/i', installerPath], {
-          detached: true,
-          stdio: 'ignore',
-        });
-        child.unref();
-      } else {
-        // Direct spawn for NSIS executable installer
-        const child = spawn(installerPath, [], {
-          detached: true,
-          stdio: 'ignore',
-        });
-        child.unref();
+    if (openErr) {
+      console.warn('shell.openPath warning:', openErr, '- trying direct spawn');
+      const isMsi = cleanPath.toLowerCase().endsWith('.msi');
+      if (process.platform === 'win32') {
+        if (isMsi) {
+          spawn('msiexec.exe', ['/i', cleanPath], { detached: true, stdio: 'ignore' }).unref();
+        } else {
+          spawn(cleanPath, [], { detached: true, stdio: 'ignore' }).unref();
+        }
       }
-    } else {
-      await shell.openPath(installerPath);
     }
 
-    // Give installer process time to spawn, then gracefully exit
+    // Give installer process time to spawn, then gracefully exit current app
     setTimeout(() => {
       isQuitting = true;
       app.quit();
-    }, 1200);
+    }, 1500);
 
     return { success: true };
   } catch (err) {
     console.error('Failed to execute installer:', err);
+    return { success: false, error: err.message };
+  }
+});
+
+ipcMain.handle('update:open-installer-folder', async (_event, installerPath) => {
+  try {
+    if (installerPath && fs.existsSync(installerPath)) {
+      shell.showItemInFolder(path.resolve(installerPath));
+      return { success: true };
+    }
+    return { success: false, error: 'Installer file not found on disk' };
+  } catch (err) {
     return { success: false, error: err.message };
   }
 });

@@ -9,10 +9,12 @@ import {
   Loader2,
   ExternalLink,
   ShieldCheck,
+  FolderOpen,
 } from 'lucide-react';
 import {
   downloadUpdateInstaller,
   runUpdateInstaller,
+  openUpdateFolder,
   onUpdateDownloadProgress,
 } from '../../services/updaterService';
 import { APP_VERSION } from '../../constants/version';
@@ -86,7 +88,11 @@ export const UpdateModal = ({
   const handleInstallNow = async () => {
     if (!downloadedPath) return;
     setDownloadState('installing');
-    await runUpdateInstaller(downloadedPath);
+    const res = await runUpdateInstaller(downloadedPath);
+    if (res && !res.success && res.error) {
+      setDownloadState('ready');
+      setErrorMessage(res.error);
+    }
   };
 
   return (
@@ -290,15 +296,28 @@ export const UpdateModal = ({
               </button>
 
               {downloadState === 'ready' ? (
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={handleInstallNow}
-                  style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-                >
-                  <ShieldCheck size={16} />
-                  Install & Restart
-                </button>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => openUpdateFolder(downloadedPath)}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                    title="Reveal downloaded installer in File Explorer"
+                  >
+                    <FolderOpen size={16} />
+                    Open Folder
+                  </button>
+
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleInstallNow}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <ShieldCheck size={16} />
+                    Install & Restart
+                  </button>
+                </div>
               ) : downloadState === 'downloading' ? (
                 <button type="button" className="btn btn-primary" disabled>
                   <Loader2 size={16} className="spinning" />

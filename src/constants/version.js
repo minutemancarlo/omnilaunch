@@ -1,53 +1,43 @@
-export const APP_VERSION = '1.2.1';
+export const APP_VERSION = '1.2.2';
 export const RELEASE_DATE = 'August 30, 2026';
 
 export const CHANGELOG_HISTORY = [
   {
-    version: '1.2.1',
+    version: '1.2.2',
     date: 'August 30, 2026',
-    tagline: 'Installer File Lock Resolution & In-Place Update Engine',
+    tagline: '1-Click Update Reliability & Streamlined Settings',
     changes: [
       {
         type: 'fix',
-        title: 'Resolved Windows Installer File Locking',
-        desc: 'Wrapped file writing streams in full OS flush and close promises, preventing sharing violations when spawning update installers.',
+        title: 'Smoother 1-Click Update Installation',
+        desc: 'Clicking "Install & Restart" now launches the setup installer seamlessly and updates OmniLaunch without Windows path or permission errors.',
       },
       {
-        type: 'improvement',
-        title: 'Seamless In-Place NSIS Setup Execution',
-        desc: 'Preferred NSIS setup executables for user-space in-place updates, avoiding Windows Installer service NTFS permission issues.',
+        type: 'ui',
+        title: 'Streamlined Settings Interface',
+        desc: 'Simplified the update settings for the public repository, keeping the interface clean and distraction-free.',
       },
       {
-        type: 'improvement',
-        title: 'Direct Process Argument Passing',
-        desc: 'Spawn installers with clean argument arrays instead of cmd /c to prevent quotation-mark stripping on paths with spaces.',
+        type: 'feature',
+        title: 'Open Installer Location',
+        desc: 'Added a handy "Open Folder" button in the update dialog to reveal the downloaded installer file directly in File Explorer.',
       },
     ],
   },
   {
     version: '1.2.0',
     date: 'August 30, 2026',
-    tagline: 'Run as Administrator, Private Repo Updates & Automated CI/CD',
+    tagline: 'Run as Administrator & Visual Privilege Badges',
     changes: [
       {
         type: 'feature',
-        title: 'Run as Administrator (Windows UAC Elevation)',
-        desc: 'Added option to launch desktop applications and CLI terminal windows with elevated Administrator privileges using native Windows UAC RunAs.',
+        title: 'Run as Administrator Option',
+        desc: 'Launch desktop applications and terminal scripts with elevated Administrator privileges whenever needed (defaulted to unchecked for safety).',
       },
       {
-        type: 'feature',
-        title: 'Visual Admin Status Badges',
-        desc: 'Prominent amber ADMIN shield indicators on Workspace Target cards and Quick Shortcut items.',
-      },
-      {
-        type: 'feature',
-        title: 'Private GitHub Repository Update Support',
-        desc: 'Secure Personal Access Token authentication for auto-updating from private GitHub repositories, with automatic GitHub Releases API fallback.',
-      },
-      {
-        type: 'feature',
-        title: 'Automated GitHub Actions Cloud Releases',
-        desc: 'Integrated CI/CD cloud pipeline building MSI and NSIS installers automatically upon pushing release tags.',
+        type: 'ui',
+        title: 'Amber Admin Shield Badges',
+        desc: 'Distinctive amber shield badges highlight items requiring administrator privileges on Workspace cards and Quick Shortcut lists.',
       },
     ],
   },

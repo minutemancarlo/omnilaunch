@@ -1,6 +1,6 @@
 {
-  "version": "1.2.1",
+  "version": "1.2.2",
   "releaseDate": "August 30, 2026",
-  "downloadUrl": "https://github.com/minutemancarlo/omnilaunch/releases/download/v1.2.1/OmniLaunch-Setup-1.2.1.exe",
-  "releaseNotes": "🔧 Resolved Windows Installer sharing lock and access violation\n🚀 Seamless 1-Click Install & Restart via NSIS user-space updater\n🛡️ Run as Administrator (Windows UAC elevation for apps & terminal)\n🛡️ Amber ADMIN shield indicators on Workspace and Shortcut cards\n🔒 Private GitHub repository auto-update authentication support\n✨ Automated GitHub Actions cloud release pipeline"
+  "downloadUrl": "https://github.com/minutemancarlo/omnilaunch/releases/download/v1.2.2/OmniLaunch-Setup-1.2.2.exe",
+  "releaseNotes": "🛠️ 1-Click Update Installation: Seamless install & restart without Windows path or permission errors\n🎨 UI & Usability: Streamlined updates dialog with direct \"Open Folder\" access\n🛡️ Run as Administrator: Launch any desktop application or terminal script with elevated privileges\n🎨 Visual Admin Badges: Distinctive amber shield indicators on Workspace and Shortcut cards\n✨ Emerald Splash Screen: Sleek brand logo with orbiting quantum rings and live status bar"
 }

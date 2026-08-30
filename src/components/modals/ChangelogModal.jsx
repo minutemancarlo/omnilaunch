@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Sparkles, Wrench, Bug, Calendar, History, ShieldCheck } from 'lucide-react';
+import { X, Sparkles, Wrench, Bug, Calendar, History, ShieldCheck, Palette } from 'lucide-react';
 import { APP_VERSION, RELEASE_DATE, CHANGELOG_HISTORY } from '../../constants/version';
 
 export const ChangelogModal = ({ isOpen, onClose }) => {
@@ -101,9 +101,10 @@ export const ChangelogModal = ({ isOpen, onClose }) => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {entry.changes.map((item, cIdx) => {
                     const isFeature = item.type === 'feature';
+                    const isUI = item.type === 'ui';
                     const isImprovement = item.type === 'improvement';
-                    const Icon = isFeature ? Sparkles : isImprovement ? Wrench : Bug;
-                    const badgeColor = isFeature ? 'var(--accent-primary)' : isImprovement ? 'var(--accent-cyan)' : '#ef4444';
+                    const Icon = isFeature ? Sparkles : isUI ? Palette : isImprovement ? Wrench : Bug;
+                    const badgeColor = isFeature ? 'var(--accent-primary)' : isUI ? '#10b981' : isImprovement ? 'var(--accent-cyan)' : '#ef4444';
 
                     return (
                       <div

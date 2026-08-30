@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   checkForUpdates: (feedUrl) => ipcRenderer.invoke('update:check', feedUrl),
   downloadUpdate: (downloadUrl) => ipcRenderer.invoke('update:download-installer', downloadUrl),
   runInstaller: (installerPath) => ipcRenderer.invoke('update:run-installer', installerPath),
+  openInstallerFolder: (installerPath) => ipcRenderer.invoke('update:open-installer-folder', installerPath),
   onDownloadProgress: (callback) => {
     const handler = (_event, progress) => callback(progress);
     ipcRenderer.on('update:download-progress', handler);

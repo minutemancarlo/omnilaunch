@@ -27,6 +27,13 @@ export const runUpdateInstaller = async (installerPath) => {
   return { success: false, error: 'Auto-update only supported in desktop Electron app' };
 };
 
+export const openUpdateFolder = async (installerPath) => {
+  if (isElectron() && window.electronAPI.openInstallerFolder) {
+    return await window.electronAPI.openInstallerFolder(installerPath);
+  }
+  return { success: false, error: 'Not supported' };
+};
+
 export const onUpdateDownloadProgress = (callback) => {
   if (isElectron() && window.electronAPI.onDownloadProgress) {
     return window.electronAPI.onDownloadProgress(callback);
