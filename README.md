@@ -22,28 +22,39 @@ OmniLaunch is a sleek, fast desktop application built with **Electron + React + 
 
 ---
 
-## Running the Application
+## Getting Started
 
-In this directory (`C:\Users\Anubis\.gemini\antigravity\scratch\omnilaunch`):
-
-### Option 1: Double-click
-Double-click [`launch.bat`](file:///C:/Users/Anubis/.gemini/antigravity/scratch/omnilaunch/launch.bat).
-
-### Building & Installing
-
-### Windows Installer (.msi)
-To build a production Windows Installer (`.msi`):
-```powershell
-npm run dist:msi
+### 1. Clone or Download the Repository
+```bash
+git clone https://github.com/minutemancarlo/omnilaunch.git
+cd omnilaunch
 ```
-The installer is generated at:
-[`release/OmniLaunch 1.0.0.msi`](file:///C:/Users/Anubis/.gemini/antigravity/scratch/omnilaunch/release/OmniLaunch%201.0.0.msi)
 
-### Development
-To run in development mode with hot reloading:
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Running the Application
+Inside the repository folder where the project was downloaded/cloned:
+
+#### Option A: Quick Launch (Windows)
+Double-click `launch.bat` or execute in terminal:
+```powershell
+.\launch.bat
+```
+
+#### Option B: Development Mode (with Hot Reloading)
 ```powershell
 npm run dev
 ```
+
+### 4. Building Installers
+To build production Windows setup packages (`.exe` and `.msi`):
+```powershell
+npm run dist
+```
+The installers will be generated inside the `dist/` or `release/` folder.
 
 ---
 
